@@ -7,9 +7,22 @@
 
 class MainWindow : public QMainWindow, private Ui::MainWindow {
 Q_OBJECT
+private:
+    QString lastFileName;
+
+    void refreshTitle(){
+        if(lastFileName.isNull()){
+            setWindowTitle("Unnamed");
+        } else {
+            setWindowTitle(lastFileName.replace("/","\\"));
+        }
+
+    }
+
 public:
-    MainWindow() {
+    MainWindow(){
         setupUi(this);
+        refreshTitle();
         show();
     }
 
@@ -24,7 +37,8 @@ public slots:
         QFile file(fileName);
         file.open(QIODevice::Text | QIODevice::WriteOnly);
         file.write(plainTextEdit->toPlainText().toUtf8());
-
+        lastFileName = fileName;
+        refreshTitle();
     }
 
     void on_actionOpen_triggered() {
@@ -37,6 +51,8 @@ public slots:
         file.open(QIODevice::Text | QIODevice::ReadOnly);
         QString str = QString::fromUtf8(file.readAll());
         plainTextEdit->setPlainText(str);
+        lastFileName = fileName;
+        refreshTitle();
 
     }
 
