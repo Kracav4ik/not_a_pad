@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QFontDialog>
 #include <QFileDialog>
 
 #include "ui_n_a_p.h"
@@ -10,17 +11,17 @@ Q_OBJECT
 private:
     QString lastFileName;
 
-    void refreshTitle(){
-        if(lastFileName.isNull()){
+    void refreshTitle() {
+        if (lastFileName.isNull()) {
             setWindowTitle("Unnamed");
         } else {
-            setWindowTitle(lastFileName.replace("/","\\"));
+            setWindowTitle(lastFileName.replace("/", "\\"));
         }
 
     }
 
 public:
-    MainWindow(){
+    MainWindow() {
         setupUi(this);
         refreshTitle();
         show();
@@ -39,6 +40,10 @@ public slots:
         file.write(plainTextEdit->toPlainText().toUtf8());
         lastFileName = fileName;
         refreshTitle();
+    }
+
+    void on_actionFont_triggered() {
+        plainTextEdit->setFont(QFontDialog::getFont(NULL, plainTextEdit->font(), this));
     }
 
     void on_actionOpen_triggered() {
